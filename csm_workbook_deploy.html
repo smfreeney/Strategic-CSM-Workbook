@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategic CSM Workbook</title>
+<style>
+:root {
+  --bg: #ffffff; --bg2: #f5f5f3; --bg3: #efefec;
+  --text: #1a1a1a; --text2: #6b6b6b; --text3: #999;
+  --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
+  --info-bg: #E6F1FB; --info-text: #0C447C;
+  --success-bg: #EAF3DE; --success-text: #3B6D11;
+  --warn-bg: #FAEEDA; --warn-text: #854F0B;
+  --danger-bg: #FCEBEB; --danger-text: #A32D2D;
+  --radius: 8px; --radius-lg: 12px;
+  --accent: #185FA5;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1c1c; --bg2: #252525; --bg3: #2e2e2e;
+    --text: #e8e8e8; --text2: #999; --text3: #666;
+    --border: rgba(255,255,255,0.1); --border2: rgba(255,255,255,0.2);
+    --info-bg: #0C447C; --info-text: #B5D4F4;
+    --success-bg: #27500A; --success-text: #C0DD97;
+    --warn-bg: #633806; --warn-text: #FAC775;
+    --danger-bg: #791F1F; --danger-text: #F7C1C1;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);font-size:15px;line-height:1.6}
+.app{max-width:920px;margin:0 auto;padding:0 0 3rem}
+header{padding:1.5rem 1.5rem 0;margin-bottom:1rem}
+header h1{font-size:22px;font-weight:500;margin-bottom:2px}
+header p{font-size:13px;color:var(--text2)}
+nav{display:flex;flex-wrap:wrap;gap:6px;padding:0 1.5rem 1rem;border-bottom:0.5px solid var(--border);margin-bottom:1.5rem}
+.nb{padding:6px 14px;font-size:13px;border:0.5px solid var(--border2);border-radius:20px;background:transparent;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.nb:hover{background:var(--bg2)}
+.nb.active{background:var(--info-bg);color:var(--info-text);border-color:transparent}
+.sec{display:none;padding:0 1.5rem}.sec.active{display:block}
+.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem}
+.ct{font-size:15px;font-weight:500;margin-bottom:.75rem}
+.cs{font-size:13px;color:var(--text2);margin-bottom:1rem;line-height:1.6}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-bottom:1rem}
+.chip{display:inline-flex;align-items:center;font-size:12px;padding:3px 10px;border-radius:12px;font-weight:500}
+h2{font-size:20px;font-weight:500;margin-bottom:.25rem}
+.ssub{font-size:14px;color:var(--text2);margin-bottom:1.25rem}
+.ah{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:.75rem 1rem;border:0.5px solid var(--border);border-radius:var(--radius);background:var(--bg2);margin-bottom:6px;font-size:14px;font-weight:500;user-select:none}
+.ah:hover{background:var(--bg)}
+.ab{display:none;padding:1rem;border:0.5px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);margin-bottom:6px;font-size:13px;line-height:1.8}
+.ab.open{display:block}
+.chv{transition:transform .2s;font-size:12px;color:var(--text2)}.chv.open{transform:rotate(180deg)}
+.cl{list-style:none}
+.cl li{display:flex;align-items:flex-start;gap:10px;padding:7px 0;font-size:13px;line-height:1.5;border-bottom:0.5px solid var(--border)}
+.cl li:last-child{border-bottom:none}
+.cl input[type=checkbox]{margin-top:2px;flex-shrink:0;width:15px;height:15px;cursor:pointer;accent-color:var(--accent)}
+.cl label{cursor:pointer}
+.cl input:checked+label{color:var(--text2);text-decoration:line-through}
+.pb{height:5px;background:var(--bg2);border-radius:3px;overflow:hidden;margin:8px 0}
+.pf{height:100%;background:var(--accent);border-radius:3px;transition:width .3s}
+.pl{font-size:12px;color:var(--text2);margin-bottom:4px}
+.qc{border:0.5px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:.75rem}
+.ql{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.qt{font-size:14px;line-height:1.6}
+.si{background:var(--bg2);border-radius:var(--radius);padding:.75rem;text-align:center}
+.si .sl{font-size:11px;color:var(--text2);margin-bottom:6px;line-height:1.4}
+.si .sn{font-size:22px;font-weight:500}
+.mx{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:1rem 0}
+.mc{padding:1rem;border-radius:var(--radius);font-size:13px;line-height:1.6}
+.ml{font-size:11px;font-weight:500;margin-bottom:4px}
+.fl{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:500;flex-shrink:0}
+.tl{position:relative;padding-left:24px}
+.tl::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:1px;background:var(--border)}
+.ti{position:relative;margin-bottom:1.25rem}
+.td{position:absolute;left:-21px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--bg)}
+.tt{font-size:14px;font-weight:500;margin-bottom:4px}
+.tb{font-size:13px;color:var(--text2);line-height:1.6}
+.fr{display:flex;gap:1rem;margin-bottom:.75rem;align-items:flex-start}
+.pc{background:var(--bg2);border-radius:var(--radius);padding:1rem;margin-bottom:.75rem;font-size:13px;line-height:1.7}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:8px;font-weight:500;margin:2px}
+.exbtn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;font-size:12px;border:0.5px solid var(--border2);border-radius:var(--radius);background:transparent;color:var(--text2);cursor:pointer;font-weight:500}
+.exbtn:hover{background:var(--bg2)}
+textarea,input[type=text],select{font-family:inherit;font-size:13px;color:var(--text);background:var(--bg2);border:0.5px solid var(--border2);border-radius:var(--radius);padding:6px 10px}
+textarea:focus,input[type=text]:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
+.rc-pill{display:inline-flex;align-items:center;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500;cursor:pointer;margin:2px;border:0.5px solid transparent;user-select:none;transition:opacity .15s}
+.rc-pill.sel{border-color:currentColor;opacity:1}
+.rc-pill:not(.sel){opacity:.45}
+strong{font-weight:500}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <h1>Strategic CSM Workbook</h1>
+  <p>Based on Chad Horenfeldt's Strategic Customer Success frameworks</p>
+</header>
+<nav id="nav">
+<button class="nb active" onclick="showSec('overview',this)">Overview</button>
+<button class="nb" onclick="showSec('meetings',this)">Meeting frameworks</button>
+<button class="nb" onclick="showSec('discovery',this)">Discovery</button>
+<button class="nb" onclick="showSec('risk',this)">Risk management</button>
+<button class="nb" onclick="showSec('renewal',this)">Renewal & expansion</button>
+<button class="nb" onclick="showSec('onboarding',this)">90-day plan</button>
+<button class="nb" onclick="showSec('prompts',this)">AI prompts</button>
+<button class="nb" onclick="showSec('rfs',this)">Weekly planner</button>
+<button class="nb" onclick="showSec('health',this)">Health tracker</button>
+<button class="nb" onclick="showSec('hero',this)">Hero journey</button>
+</nav>
+
+<div id="overview" class="sec active">
+<h2>Strategic CSM workbook</h2>
+<p class="ssub">Based on Chad Horenfeldt's Strategic Customer Success frameworks</p>
+<div class="g2">
+<div class="card">
+<div class="ct">Core frameworks</div>
+<div class="tl">
+<div class="ti"><div class="td"></div><div class="tt">OARS</div><div class="tb">Open questions, Affirmations, Reflections, Summaries</div></div>
+<div class="ti"><div class="td"></div><div class="tt">SOON funnel</div><div class="tb">Success, Obstacles, Options, Next Steps</div></div>
+<div class="ti"><div class="td"></div><div class="tt">ACE opener</div><div class="tb">Appreciate, Confirm, Engage</div></div>
+<div class="ti"><div class="td"></div><div class="tt">3C research</div><div class="tb">Company, Customers, Challenges</div></div>
+<div class="ti"><div class="td"></div><div class="tt">RFS weekly ritual</div><div class="tb">Reflect, Focus, Schedule</div></div>
+</div>
+</div>
+<div class="card">
+<div class="ct">Workbook sections</div>
+<div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--border)"><span>Meeting frameworks</span><span class="chip" style="background:#E1F5EE;color:#0F6E56">ACE · OARS · SOON</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--border)"><span>Discovery</span><span class="chip" style="background:#EEEDFE;color:#3C3489">Questions & tools</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--border)"><span>Risk management</span><span class="chip" style="background:#FAEEDA;color:#854F0B">3-phase system</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--border)"><span>Renewal & expansion</span><span class="chip" style="background:#FAECE7;color:#993C1D">JRP · SPOON</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--border)"><span>90-day onboarding</span><span class="chip" style="background:#E6F1FB;color:#0C447C">Checklists</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--border)"><span>AI prompts</span><span class="chip" style="background:#E1F5EE;color:#0F6E56">PLAN framework</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--border)"><span>Weekly RFS planner</span><span class="chip" style="background:#EEEDFE;color:#3C3489">Reflect · Focus · Schedule</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--border)"><span>Health tracker</span><span class="chip" style="background:#FAEEDA;color:#854F0B">Portfolio + risk categories</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0"><span>Hero journey maps</span><span class="chip" style="background:#FAECE7;color:#993C1D">Per-customer</span></div>
+</div>
+</div>
+</div>
+<div class="card">
+<div class="ct">Strategic CSM philosophy</div>
+<div class="g2" style="margin-bottom:0">
+<div style="font-size:13px;line-height:1.7;color:var(--text2)"><strong>Customers don't expect perfection.</strong> They expect honesty, empathy, and accountability. Strategic CSMs bake proactive curiosity into every interaction — they don't wait for renewal to uncover risk.</div>
+<div style="font-size:13px;line-height:1.7;color:var(--text2)">The goal is always to make your customers the <strong>hero of their own story</strong> — outcome-driven, not product-centric. Every framework here serves that purpose.</div>
+</div>
+</div>
+</div>
+
+<div id="meetings" class="sec">
+<h2>Meeting frameworks</h2><p class="ssub">Tools for running high-leverage, outcome-focused customer conversations</p>
+<div class="ah" onclick="tAcc(this)"><span>ACE — meeting opener</span><span class="chv">▼</span></div>
+<div class="ab">
+<div class="fr"><div class="fl" style="background:#E1F5EE;color:#0F6E56">A</div><div><div style="font-weight:500;font-size:14px;margin-bottom:4px">Appreciate</div><div style="font-size:13px;color:var(--text2)">Open with a genuine, specific acknowledgment. Research recent news, personal milestones, or progress. Rehearsed appreciation falls flat — make it real.</div></div></div>
+<div class="fr"><div class="fl" style="background:#EEEDFE;color:#3C3489">C</div><div><div style="font-weight:500;font-size:14px;margin-bottom:4px">Confirm</div><div style="font-size:13px;color:var(--text2)">State the meeting goal in under 20 seconds, framed around client outcomes. Present the agenda and invite additions. Must pass the "so what?" test.</div></div></div>
+<div class="fr"><div class="fl" style="background:#FAEEDA;color:#854F0B">E</div><div><div style="font-weight:500;font-size:14px;margin-bottom:4px">Engage</div><div style="font-size:13px;color:var(--text2)">"What else would you like to make sure we cover today?" Then stay silent for at least 7 seconds. Respond to additions by incorporating or scheduling separately.</div></div></div>
+</div>
+<div class="ah" onclick="tAcc(this)"><span>OARS — conversation technique</span><span class="chv">▼</span></div>
+<div class="ab">
+<div style="font-size:13px;margin-bottom:1rem;color:var(--text2)">Target a 7:1 ratio of open to closed questions. One question at a time, then silence.</div>
+<div class="fr"><div class="fl" style="background:#E6F1FB;color:#0C447C">O</div><div><div style="font-weight:500;font-size:14px;margin-bottom:4px">Open questions</div><div style="font-size:13px;color:var(--text2)">Start with What, How, Tell me about. Impact: "What's the cost if this isn't addressed?" Value: "If we solved this, what else could you get done?"</div></div></div>
+<div class="fr"><div class="fl" style="background:#EAF3DE;color:#3B6D11">A</div><div><div style="font-weight:500;font-size:14px;margin-bottom:4px">Affirmations</div><div style="font-size:13px;color:var(--text2)">Specific and genuine. Use at conversation starts and pivotal moments. "The way you've championed this initiative shows real leadership."</div></div></div>
+<div class="fr"><div class="fl" style="background:#FAECE7;color:#993C1D">R</div><div><div style="font-weight:500;font-size:14px;margin-bottom:4px">Reflections</div><div style="font-size:13px;color:var(--text2)">Starters: "It seems like..." / "What I'm hearing is..." Use mirroring (repeat last 3–5 words as a question). Statement tone, not questioning.</div></div></div>
+<div class="fr"><div class="fl" style="background:#FBEAF0;color:#72243E">S</div><div><div style="font-weight:500;font-size:14px;margin-bottom:4px">Summaries</div><div style="font-size:13px;color:var(--text2)">Mandatory at end of every meeting. Weave facts, concerns, opportunities, and emotions. Seek confirmation: "Did I miss anything?"</div></div></div>
+</div>
+<div class="ah" onclick="tAcc(this)"><span>SOON funnel — discussion to action</span><span class="chv">▼</span></div>
+<div class="ab">
+<div class="fr"><div class="fl" style="background:#E1F5EE;color:#0F6E56">S</div><div><div style="font-weight:500;font-size:14px;margin-bottom:4px">Success</div><div style="font-size:13px;color:var(--text2)">"What would success look like?" Elevates from tactical to strategic. Sets direction for everything that follows.</div></div></div>
+<div class="fr"><div class="fl" style="background:#FAEEDA;color:#854F0B">O</div><div><div style="font-weight:500;font-size:14px;margin-bottom:4px">Obstacles</div><div style="font-size:13px;color:var(--text2)">"What's stopping you?" Distinguish symptoms from root causes. Is the client their own obstacle?</div></div></div>
+<div class="fr"><div class="fl" style="background:#EEEDFE;color:#3C3489">O</div><div><div style="font-weight:500;font-size:14px;margin-bottom:4px">Options</div><div style="font-size:13px;color:var(--text2)">Good-better-best structure. Lead with "better." Social proof + "What if" questions unlock thinking.</div></div></div>
+<div class="fr"><div class="fl" style="background:#FAECE7;color:#993C1D">N</div><div><div style="font-weight:500;font-size:14px;margin-bottom:4px">Next steps</div><div style="font-size:13px;color:var(--text2)">Importance (0–10) + Confidence (0–10). High: "Why not lower?" Low: "What would move it higher?"</div></div></div>
+<div style="margin-top:1rem;font-weight:500;font-size:13px;margin-bottom:8px">Motivation matrix</div>
+<div class="mx">
+<div class="mc" style="background:#E1F5EE"><div class="ml" style="color:#0F6E56">High importance / High confidence</div><div style="font-size:12px;color:#0F6E56">Move to specific, time-bound next steps.</div></div>
+<div class="mc" style="background:#FAEEDA"><div class="ml" style="color:#854F0B">High importance / Low confidence</div><div style="font-size:12px;color:#854F0B">Build capabilities. Break into smaller actions.</div></div>
+<div class="mc" style="background:#EEEDFE"><div class="ml" style="color:#3C3489">Low importance / High confidence</div><div style="font-size:12px;color:#3C3489">Revisit Success. Use double-sided reflections.</div></div>
+<div class="mc" style="background:#FCEBEB"><div class="ml" style="color:#A32D2D">Low importance / Low confidence</div><div style="font-size:12px;color:#A32D2D">Return to earlier SOON stages. One small win.</div></div>
+</div>
+</div>
+<div class="ah" onclick="tAcc(this)"><span>QBR / Strategic checkpoint checklist</span><span class="chv">▼</span></div>
+<div class="ab">
+<div style="font-size:12px;font-weight:500;color:var(--text2);margin-bottom:8px">PRE-MEETING</div>
+<ul class="cl">
+<li><input type="checkbox" id="q1" onchange="updP('qbr')"><label for="q1">Pre-meeting with day-to-day contact — confirm topics, priorities, stakeholders</label></li>
+<li><input type="checkbox" id="q2" onchange="updP('qbr')"><label for="q2">Confirm decision-maker attendance</label></li>
+<li><input type="checkbox" id="q3" onchange="updP('qbr')"><label for="q3">Analyze client data with focus on business outcomes</label></li>
+<li><input type="checkbox" id="q4" onchange="updP('qbr')"><label for="q4">Create 2–3 slides on achievements with context, benchmarks, ROI</label></li>
+<li><input type="checkbox" id="q5" onchange="updP('qbr')"><label for="q5">Prepare 2–3 strategic discussion topics — future-focused, not product-centric</label></li>
+<li><input type="checkbox" id="q6" onchange="updP('qbr')"><label for="q6">Send materials 48 hours in advance</label></li>
+</ul>
+<div style="font-size:12px;font-weight:500;color:var(--text2);margin:12px 0 8px">DURING</div>
+<ul class="cl">
+<li><input type="checkbox" id="q7" onchange="updP('qbr')"><label for="q7">ACE opener — establish as dialogue, not presentation</label></li>
+<li><input type="checkbox" id="q8" onchange="updP('qbr')"><label for="q8">Executive overview (1 slide) with honest acknowledgment of challenges</label></li>
+<li><input type="checkbox" id="q9" onchange="updP('qbr')"><label for="q9">Data review kept to 20–25% of total meeting time</label></li>
+<li><input type="checkbox" id="q10" onchange="updP('qbr')"><label for="q10">Strategic discussion with OARS, future-focused</label></li>
+<li><input type="checkbox" id="q11" onchange="updP('qbr')"><label for="q11">Action plan with owners, timelines, next checkpoint date</label></li>
+</ul>
+<div style="font-size:12px;font-weight:500;color:var(--text2);margin:12px 0 8px">POST-MEETING</div>
+<ul class="cl">
+<li><input type="checkbox" id="q12" onchange="updP('qbr')"><label for="q12">Detailed summary sent within 24 hours</label></li>
+<li><input type="checkbox" id="q13" onchange="updP('qbr')"><label for="q13">Update health score, success plan, CRM</label></li>
+<li><input type="checkbox" id="q14" onchange="updP('qbr')"><label for="q14">Brief internal teams on priorities and expansion signals</label></li>
+</ul>
+<div class="pl" style="margin-top:12px" id="qbr-progress-label">0 of 14 complete</div>
+<div class="pb"><div class="pf" id="qbr-progress" style="width:0%"></div></div>
+</div>
+</div>
+
+<div id="discovery" class="sec">
+<h2>Discovery</h2><p class="ssub">Frameworks for uncovering what customers actually need</p>
+<div class="ah" onclick="tAcc(this)"><span>Bob London's radically authentic discovery questions</span><span class="chv">▼</span></div>
+<div class="ab">
+<div style="font-size:12px;font-weight:500;color:var(--text2);margin-bottom:10px">ABOUT THEIR BUSINESS</div>
+<div class="qc"><div class="ql">Strategic priority</div><div class="qt">"What do you think is the biggest priority or challenge your board is discussing?"</div></div>
+<div class="qc"><div class="ql">Critical outcome</div><div class="qt">"Out of your entire job description, what's the one thing your company is counting on you to get done?"</div></div>
+<div class="qc"><div class="ql">90-day whiteboard</div><div class="qt">"What absolutely has to be off your whiteboard in the next 90 days?"</div></div>
+<div style="font-size:12px;font-weight:500;color:var(--text2);margin:14px 0 10px">ABOUT THEM PERSONALLY</div>
+<div class="qc"><div class="ql">Magic wand</div><div class="qt">"If I gave you a magic wand, what problem would you make disappear first?"</div></div>
+<div class="qc"><div class="ql">Hardest part</div><div class="qt">"What's the hardest part of your job?"</div></div>
+<div class="qc"><div class="ql">Boss's lens</div><div class="qt">"If your boss knew you were talking to me, what would they want you to tell me or ask me?"</div></div>
+<div style="font-size:12px;font-weight:500;color:var(--text2);margin:14px 0 10px">ABOUT YOUR PRODUCT</div>
+<div class="qc"><div class="ql">Switching pain</div><div class="qt">"On a scale of 1–5, from no-sweat to excruciating, what would it be like to change providers?"</div></div>
+<div class="qc"><div class="ql">Surprise</div><div class="qt">"What's one thing that surprised you since you signed the contract?"</div></div>
+<div class="qc"><div class="ql">Customer for life</div><div class="qt">"What would make you a customer for life?"</div></div>
+</div>
+<div class="ah" onclick="tAcc(this)"><span>Business outcome discovery — vague to measurable</span><span class="chv">▼</span></div>
+<div class="ab">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;margin-bottom:1rem">
+<div style="padding:8px 12px;border-radius:var(--radius);background:var(--danger-bg);color:var(--danger-text)"><div style="font-weight:500;margin-bottom:4px">Vague</div>Improve efficiency</div>
+<div style="padding:8px 12px;border-radius:var(--radius);background:var(--success-bg);color:var(--success-text)"><div style="font-weight:500;margin-bottom:4px">Measurable</div>Reduce processing time 25% in Q1</div>
+<div style="padding:8px 12px;border-radius:var(--radius);background:var(--danger-bg);color:var(--danger-text)">Better reporting</div>
+<div style="padding:8px 12px;border-radius:var(--radius);background:var(--success-bg);color:var(--success-text)">Cut report creation from 5 hrs to 1 hr by month 3</div>
+</div>
+<div class="qc"><div class="ql">Key question</div><div class="qt">"If you fast forward a year and you're really happy working with us — how would things be different?"</div></div>
+</div>
+<div class="ah" onclick="tAcc(this)"><span>Call assessment scorecard</span><span class="chv">▼</span></div>
+<div class="ab">
+<div style="font-size:13px;color:var(--text2);margin-bottom:1rem">Rate your last customer call (0–10) across each dimension.</div>
+<div id="scorecard-sliders"></div>
+<div style="margin-top:1.25rem;padding:1rem;border-radius:var(--radius);background:var(--bg2)">
+<div style="font-size:13px;font-weight:500;margin-bottom:4px">Overall strategic CSM score</div>
+<div style="font-size:28px;font-weight:500" id="overall-score">–</div>
+<div style="font-size:12px;color:var(--text2)" id="score-interp"></div>
+</div>
+</div>
+</div>
+
+<div id="risk" class="sec">
+<h2>Risk management</h2><p class="ssub">Three-phase system — proactive curiosity, smart categorization, swift action</p>
+<div class="g2">
+<div class="card">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:.75rem"><div style="width:28px;height:28px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#0F6E56">1</div><div class="ct" style="margin:0">Detection (daily)</div></div>
+<div style="font-size:13px;line-height:1.8;color:var(--text2)">Traffic light: <span class="chip" style="background:#E1F5EE;color:#0F6E56;font-size:11px">Green &gt;90%</span> <span class="chip" style="background:#FAEEDA;color:#854F0B;font-size:11px">Yellow 50–90%</span> <span class="chip" style="background:#FCEBEB;color:#A32D2D;font-size:11px">Red &lt;50%</span><br><br>Monitor: usage trends, onboarding progress vs. peers, stakeholder changes, response times, support ticket activity.<br><br><em>"If renewal was tomorrow, from 1–10, how likely would you renew?"</em></div>
+</div>
+<div class="card">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:.75rem"><div style="width:28px;height:28px;border-radius:50%;background:#FAEEDA;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#854F0B">2</div><div class="ct" style="margin:0">Categorization (weekly)</div></div>
+<div style="display:flex;flex-wrap:wrap;gap:4px">
+<span class="tag" style="background:#FCEBEB;color:#A32D2D">Product gaps</span><span class="tag" style="background:#FCEBEB;color:#A32D2D">Product issues</span><span class="tag" style="background:#FAEEDA;color:#854F0B">Low engagement</span><span class="tag" style="background:#FAEEDA;color:#854F0B">Stakeholder turnover</span><span class="tag" style="background:#FAEEDA;color:#854F0B">Low adoption</span><span class="tag" style="background:#FAEEDA;color:#854F0B">Low value achieved</span><span class="tag" style="background:#EEEDFE;color:#3C3489">Financial instability</span><span class="tag" style="background:#EEEDFE;color:#3C3489">Poor onboarding</span><span class="tag" style="background:#EEEDFE;color:#3C3489">Low satisfaction</span>
+</div>
+</div>
+</div>
+<div class="card">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:.75rem"><div style="width:28px;height:28px;border-radius:50%;background:#FAECE7;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#993C1D">3</div><div class="ct" style="margin:0">Mitigation (when risks confirmed)</div></div>
+<div class="g2" style="margin-bottom:0">
+<div style="font-size:13px;line-height:1.8;color:var(--text2)"><strong>Ask for help</strong> — colleagues, execs, partners. Scout LinkedIn for internal advocates.<br><br><strong>Find root cause</strong> — look beyond symptoms (low usage) to underlying problems (low value).</div>
+<div style="font-size:13px;line-height:1.8;color:var(--text2)"><strong>Fill the value gap</strong> — additional services, discounts, custom benchmarks.<br><br><strong>Paint the future</strong> — roadmap aligned to needs, maturity assessments, ROI calculators.</div>
+</div>
+</div>
+<div class="card">
+<div class="ct">Weekly risk review checklist</div>
+<ul class="cl">
+<li><input type="checkbox" id="r1" onchange="updP('risk')"><label for="r1">Review all accounts by traffic light status — flag any changes</label></li>
+<li><input type="checkbox" id="r2" onchange="updP('risk')"><label for="r2">Check for stakeholder changes or departures</label></li>
+<li><input type="checkbox" id="r3" onchange="updP('risk')"><label for="r3">Identify accounts with declining usage trends</label></li>
+<li><input type="checkbox" id="r4" onchange="updP('risk')"><label for="r4">Review open support tickets for patterns</label></li>
+<li><input type="checkbox" id="r5" onchange="updP('risk')"><label for="r5">Note accounts that haven't responded to outreach</label></li>
+<li><input type="checkbox" id="r6" onchange="updP('risk')"><label for="r6">Confirm mitigation plan active for all red accounts</label></li>
+<li><input type="checkbox" id="r7" onchange="updP('risk')"><label for="r7">Update account health scores in CRM</label></li>
+</ul>
+<div class="pl" style="margin-top:8px" id="risk-progress-label">0 of 7 complete</div>
+<div class="pb"><div class="pf" id="risk-progress" style="width:0%"></div></div>
+</div>
+</div>
+
+<div id="renewal" class="sec">
+<h2>Renewal & expansion</h2><p class="ssub">JRP development, renewal presentation prep, and SPOON expansion discovery</p>
+<div class="ah" onclick="tAcc(this)"><span>JRP development — 120 days out</span><span class="chv">▼</span></div>
+<div class="ab">
+<ul class="cl">
+<li><input type="checkbox" id="j1" onchange="updP('jrp')"><label for="j1">Schedule JRP overview meeting ~120 days before renewal</label></li>
+<li><input type="checkbox" id="j2" onchange="updP('jrp')"><label for="j2">Identify all stakeholders: decision makers, influencers, legal, procurement, finance</label></li>
+<li><input type="checkbox" id="j3" onchange="updP('jrp')"><label for="j3">Ask: "Who has the ability to stop this renewal from happening?"</label></li>
+<li><input type="checkbox" id="j4" onchange="updP('jrp')"><label for="j4">Document timing requirements for each stakeholder group</label></li>
+<li><input type="checkbox" id="j5" onchange="updP('jrp')"><label for="j5">Review and document progress against each business outcome</label></li>
+<li><input type="checkbox" id="j6" onchange="updP('jrp')"><label for="j6">Identify outcomes not achieved — address honestly</label></li>
+<li><input type="checkbox" id="j7" onchange="updP('jrp')"><label for="j7">Map milestones backwards from signature date (aim 1 week early)</label></li>
+<li><input type="checkbox" id="j8" onchange="updP('jrp')"><label for="j8">Note stakeholder vacations and unavailable periods</label></li>
+<li><input type="checkbox" id="j9" onchange="updP('jrp')"><label for="j9">Create formal JRP document and share with all stakeholders</label></li>
+</ul>
+<div class="pl" style="margin-top:8px" id="jrp-progress-label">0 of 9 complete</div>
+<div class="pb"><div class="pf" id="jrp-progress" style="width:0%"></div></div>
+</div>
+<div class="ah" onclick="tAcc(this)"><span>SPOON — expansion discovery</span><span class="chv">▼</span></div>
+<div class="ab">
+<div class="fr"><div class="fl" style="background:#E1F5EE;color:#0F6E56">S</div><div><div style="font-weight:500;font-size:14px;margin-bottom:4px">Success</div><div style="font-size:13px;color:var(--text2)">Establish the desired outcome before proposing anything.</div></div></div>
+<div class="fr"><div class="fl" style="background:#FCEBEB;color:#A32D2D">P</div><div><div style="font-weight:500;font-size:14px;margin-bottom:4px">Pain</div><div style="font-size:13px;color:var(--text2)">"What are you finding most challenging about [area]?" Uncover the need driving expansion.</div></div></div>
+<div class="fr"><div class="fl" style="background:#FAEEDA;color:#854F0B">O</div><div><div style="font-weight:500;font-size:14px;margin-bottom:4px">Obstacles</div><div style="font-size:13px;color:var(--text2)">Budget, competing priorities, technical limits, internal politics, timing.</div></div></div>
+<div class="fr"><div class="fl" style="background:#EEEDFE;color:#3C3489">O</div><div><div style="font-weight:500;font-size:14px;margin-bottom:4px">Options</div><div style="font-size:13px;color:var(--text2)">Good-better-best. Lead with "better." Paid + no-cost options, all tied to outcomes.</div></div></div>
+<div class="fr"><div class="fl" style="background:#FAECE7;color:#993C1D">N</div><div><div style="font-weight:500;font-size:14px;margin-bottom:4px">Next steps</div><div style="font-size:13px;color:var(--text2)">Specific actions, timeline, decision process, follow-up scheduled.</div></div></div>
+</div>
+</div>
+
+<div id="onboarding" class="sec">
+<h2>90-day onboarding plan</h2><p class="ssub">Company, customers, product, processes, and cross-team alignment</p>
+<div class="ah" onclick="tAcc(this)"><span>Days 1–30 — The honeymoon phase</span><span class="chv">▼</span></div>
+<div class="ab">
+<ul class="cl">
+<li><input type="checkbox" id="ob1" onchange="updP('ob1')"><label for="ob1">Research: website, webinars, case studies, G2, recent news</label></li>
+<li><input type="checkbox" id="ob2" onchange="updP('ob1')"><label for="ob2">Schedule 2–3 informal meetings with teammates before day 1</label></li>
+<li><input type="checkbox" id="ob3" onchange="updP('ob1')"><label for="ob3">Develop 3 versions of company elevator pitch</label></li>
+<li><input type="checkbox" id="ob4" onchange="updP('ob1')"><label for="ob4">Build your personal "unique value" elevator pitch</label></li>
+<li><input type="checkbox" id="ob5" onchange="updP('ob1')"><label for="ob5">Connect with every team member — identify mentors and high performers</label></li>
+<li><input type="checkbox" id="ob6" onchange="updP('ob1')"><label for="ob6">Cross-functional introductions: onboarding, support, sales, product, marketing</label></li>
+<li><input type="checkbox" id="ob7" onchange="updP('ob1')"><label for="ob7">Shadow 8–10 customer calls (live and recorded)</label></li>
+<li><input type="checkbox" id="ob8" onchange="updP('ob1')"><label for="ob8">Complete all formal product training — set up demo environment</label></li>
+<li><input type="checkbox" id="ob9" onchange="updP('ob1')"><label for="ob9">Learn CRM, CS platform, and key tooling</label></li>
+<li><input type="checkbox" id="ob10" onchange="updP('ob1')"><label for="ob10">Study company culture, values, and industry terminology</label></li>
+</ul>
+<div class="pl" style="margin-top:8px" id="ob1-progress-label">0 of 10 complete</div>
+<div class="pb"><div class="pf" id="ob1-progress" style="width:0%"></div></div>
+</div>
+<div class="ah" onclick="tAcc(this)"><span>Days 31–60 — The messy middle</span><span class="chv">▼</span></div>
+<div class="ab">
+<ul class="cl">
+<li><input type="checkbox" id="ob11" onchange="updP('ob2')"><label for="ob11">Begin with a subset of clients before taking full load</label></li>
+<li><input type="checkbox" id="ob12" onchange="updP('ob2')"><label for="ob12">Have manager or mentor shadow initial customer meetings</label></li>
+<li><input type="checkbox" id="ob13" onchange="updP('ob2')"><label for="ob13">Schedule prep time before every meeting — document all interactions</label></li>
+<li><input type="checkbox" id="ob14" onchange="updP('ob2')"><label for="ob14">Ask for help when needed — identify the real problem first</label></li>
+<li><input type="checkbox" id="ob15" onchange="updP('ob2')"><label for="ob15">Regular check-ins with manager, specific feedback after calls</label></li>
+<li><input type="checkbox" id="ob16" onchange="updP('ob2')"><label for="ob16">Continue product learning — advanced features, integrations, analytics</label></li>
+<li><input type="checkbox" id="ob17" onchange="updP('ob2')"><label for="ob17">Practice OARS, SOON, and ACE in every customer interaction</label></li>
+</ul>
+<div class="pl" style="margin-top:8px" id="ob2-progress-label">0 of 7 complete</div>
+<div class="pb"><div class="pf" id="ob2-progress" style="width:0%"></div></div>
+</div>
+<div class="ah" onclick="tAcc(this)"><span>Days 61–90 — Getting the hang of things</span><span class="chv">▼</span></div>
+<div class="ab">
+<ul class="cl">
+<li><input type="checkbox" id="ob18" onchange="updP('ob3')"><label for="ob18">Manage full client portfolio — build or confirm tracking system</label></li>
+<li><input type="checkbox" id="ob19" onchange="updP('ob3')"><label for="ob19">Develop weekly RFS ritual</label></li>
+<li><input type="checkbox" id="ob20" onchange="updP('ob3')"><label for="ob20">Create templates for common communications</label></li>
+<li><input type="checkbox" id="ob21" onchange="updP('ob3')"><label for="ob21">Clarify performance expectations (metrics, behaviors, promotion criteria)</label></li>
+<li><input type="checkbox" id="ob22" onchange="updP('ob3')"><label for="ob22">Identify and document process improvement opportunities</label></li>
+<li><input type="checkbox" id="ob23" onchange="updP('ob3')"><label for="ob23">Build system for tracking and communicating achievements</label></li>
+</ul>
+<div class="pl" style="margin-top:8px" id="ob3-progress-label">0 of 6 complete</div>
+<div class="pb"><div class="pf" id="ob3-progress" style="width:0%"></div></div>
+</div>
+<div class="ah" onclick="tAcc(this)"><span>Kickoff meeting checklist</span><span class="chv">▼</span></div>
+<div class="ab">
+<ul class="cl">
+<li><input type="checkbox" id="k1" onchange="updP('kick')"><label for="k1">Complete sales handoff — review calls, notes, contract/SOW (use AI to summarize)</label></li>
+<li><input type="checkbox" id="k2" onchange="updP('kick')"><label for="k2">Confirm decision-maker attendance is mandatory for first 30 minutes</label></li>
+<li><input type="checkbox" id="k3" onchange="updP('kick')"><label for="k3">Research client using 3C framework (Company, Customers, Challenges)</label></li>
+<li><input type="checkbox" id="k4" onchange="updP('kick')"><label for="k4">Personalize agenda and share with all attendees in advance</label></li>
+<li><input type="checkbox" id="k5" onchange="updP('kick')"><label for="k5">Use ACE framework, validate business outcomes with decision-maker present</label></li>
+<li><input type="checkbox" id="k6" onchange="updP('kick')"><label for="k6">Set expectations: roles, responsibilities, resources, communication cadence</label></li>
+<li><input type="checkbox" id="k7" onchange="updP('kick')"><label for="k7">Move to implementation details after decision-maker has opportunity to leave</label></li>
+<li><input type="checkbox" id="k8" onchange="updP('kick')"><label for="k8">Send meeting summary within 24 hours</label></li>
+</ul>
+<div class="pl" style="margin-top:8px" id="kick-progress-label">0 of 8 complete</div>
+<div class="pb"><div class="pf" id="kick-progress" style="width:0%"></div></div>
+</div>
+</div>
+
+<div id="prompts" class="sec">
+<h2>AI prompts for CSMs</h2><p class="ssub">PLAN framework prompts — copy, fill in, and use</p>
+<div class="card"><div class="ct">Prompt 1 — Pre-meeting customer briefing (3Cs)</div>
+<div class="pc"><strong>Purpose:</strong> Create a pre-meeting briefing to run a high-leverage conversation with [Customer], and identify the most strategic topic to lead with to achieve [your objective].<br><br><strong>Limits:</strong> Use up-to-date public sources with citations. Focus on last 90 days. Prioritize signal over volume. Label anything uncertain. Call out risks, tradeoffs, and "what could go wrong."<br><br><strong>Audience context:</strong> Me: [Your Role] at [Company]. I've supported this customer for [time period]. Meeting with [Contact Name], [title]. They are [time-constrained / ROI-driven / risk-averse / etc.].<br><br><strong>Output sections:</strong> (1) Core Business Profile (2) Current Strategic Focus &amp; Challenges — last 90 days (3) Stakeholder Profile(s) (4) Actionable insights — single most strategic topic, 2–3 lead lines, 3 proof points</div></div>
+<div class="card"><div class="ct">Prompt 2 — Strategic discovery questions</div>
+<div class="pc"><strong>Purpose:</strong> Create 8–10 strategic questions to achieve [meeting purpose]. Questions should create productive tension and naturally lead the customer toward the meeting goal.<br><br><strong>Limits:</strong> Inspired by Bob London's radically authentic discovery approach. Each question must expose a risk, tradeoff, or missed opportunity. Avoid generic questions. Tone: direct, executive, commercially grounded.<br><br><strong>Audience:</strong> [Customer Name], [Contact Names], [Titles]. Context: [recent interactions, known challenges].<br><br><strong>Output:</strong> Three buckets — High-level business priorities, Current challenges/pains, Implicit gaps/risks/tradeoffs. Commentary on why to ask each bucket. Ordered for a 5–10 minute conversation.</div></div>
+<div class="card"><div class="ct">Prompt 3 — Call assessment</div>
+<div class="pc"><strong>Purpose:</strong> You are a call-assessment AI. Evaluate the uploaded transcript using the OARS framework, strategic conversation indicators, depth of discovery, executive presence, and renewal/expansion awareness.<br><br><strong>Before assessing:</strong> Ask me "What was the meeting goal or desired outcome?"<br><br><strong>Output:</strong> (A) Summary scorecard 0–10 per category including Open Questions (7:3 ratio target), Affirmations, Reflections, Summary delivered, Strategic influence, Executive presence, Renewal/expansion awareness, Overall score. (B) 3–5 strengths. (C) 3–5 growth opportunities. (D) Suggested phrasing and talk tracks.</div></div>
+<div class="card"><div class="ct">PLAN framework</div>
+<div class="g2" style="margin-bottom:0">
+<div style="font-size:13px;line-height:1.9;color:var(--text2)"><strong>P — Purpose:</strong> What you want the AI to do<br><strong>L — Limits:</strong> Sources, length, tone, focus constraints<br><strong>A — Audience context:</strong> Who you are, who the customer is<br><strong>N — Needed output:</strong> Exact sections or format required</div>
+<div style="font-size:13px;line-height:1.8;color:var(--text2)">Replace everything in [brackets] with real details. More specific context = more targeted output.</div>
+</div></div>
+</div>
+
+<div id="rfs" class="sec">
+<h2>Weekly RFS planner</h2><p class="ssub">Reflect, Focus, Schedule — your weekly preparation ritual. Target: 30–60 minutes every week.</p>
+<div style="display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap;align-items:center">
+<button onclick="setWk(-1)" class="exbtn">← Prev week</button>
+<div style="flex:1;text-align:center;font-size:14px;font-weight:500" id="week-label"></div>
+<button onclick="setWk(1)" class="exbtn">Next week →</button>
+<button onclick="exportRFS()" class="exbtn">Export week ↓</button>
+</div>
+<div class="card" style="border-left:3px solid #5DCAA5;border-radius:0 var(--radius-lg) var(--radius-lg) 0">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:.75rem"><div class="fl" style="background:#E1F5EE;color:#0F6E56;width:28px;height:28px;font-size:13px">R</div><div class="ct" style="margin:0">Reflect</div><span style="font-size:11px;color:var(--text2);margin-left:auto">~20 min</span></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px">
+<div><label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px">What am I most proud of this week?</label><textarea id="rfs-proud" rows="3" style="width:100%;resize:vertical" placeholder="Be specific..." oninput="saveRFS()"></textarea></div>
+<div><label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px">Where did I not show up at my best?</label><textarea id="rfs-improve" rows="3" style="width:100%;resize:vertical" placeholder="Patterns, not one-offs..." oninput="saveRFS()"></textarea></div>
+<div><label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px">One thing I learned this week</label><textarea id="rfs-learned" rows="3" style="width:100%;resize:vertical" placeholder="And how I'll apply it..." oninput="saveRFS()"></textarea></div>
+<div><label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px">Which customers did I neglect?</label><textarea id="rfs-neglected" rows="3" style="width:100%;resize:vertical" placeholder="Prioritize next week..." oninput="saveRFS()"></textarea></div>
+</div>
+</div>
+<div class="card" style="border-left:3px solid #AFA9EC;border-radius:0 var(--radius-lg) var(--radius-lg) 0">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:.75rem"><div class="fl" style="background:#EEEDFE;color:#3C3489;width:28px;height:28px;font-size:13px">F</div><div class="ct" style="margin:0">Focus</div><span style="font-size:11px;color:var(--text2);margin-left:auto">~20 min</span></div>
+<div style="font-size:12px;color:var(--text2);margin-bottom:10px">Top must-do items for the week. Assign priority to each.</div>
+<div id="focus-items"></div>
+<button onclick="addFI()" style="font-size:12px;padding:5px 12px;border:0.5px solid var(--border2);border-radius:var(--radius);background:transparent;color:var(--text2);cursor:pointer;margin-top:6px">+ Add item</button>
+</div>
+<div class="card" style="border-left:3px solid #F0997B;border-radius:0 var(--radius-lg) var(--radius-lg) 0">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:.75rem"><div class="fl" style="background:#FAECE7;color:#993C1D;width:28px;height:28px;font-size:13px">S</div><div class="ct" style="margin:0">Schedule</div><span style="font-size:11px;color:var(--text2);margin-left:auto">~20 min</span></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px">
+<div><div style="font-size:12px;font-weight:500;color:var(--text2);margin-bottom:8px">Calendar audit</div>
+<ul class="cl"><li><input type="checkbox" id="sch1"><label for="sch1">All meetings still necessary?</label></li><li><input type="checkbox" id="sch2"><label for="sch2">Every meeting has a clear agenda</label></li><li><input type="checkbox" id="sch3"><label for="sch3">Prep time blocked before key meetings</label></li><li><input type="checkbox" id="sch4"><label for="sch4">At least 3 deep work blocks (60–90 min)</label></li><li><input type="checkbox" id="sch5"><label for="sch5">Buffer time between meetings</label></li><li><input type="checkbox" id="sch6"><label for="sch6">One well-being activity scheduled</label></li></ul></div>
+<div><label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px">Key meetings &amp; prep notes</label><textarea id="rfs-schedule" rows="8" style="width:100%;resize:vertical" placeholder="List meetings and what prep each needs..." oninput="saveRFS()"></textarea></div>
+</div>
+</div>
+<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:.5rem"><button onclick="clearRFS()" class="exbtn">Clear this week</button></div>
+</div>
+
+<div id="health" class="sec">
+<h2>Client health tracker</h2><p class="ssub">Portfolio-level health snapshot with risk categorization. Update weekly during your Focus phase.</p>
+<div style="display:flex;gap:8px;align-items:center;margin-bottom:1rem;flex-wrap:wrap">
+<button onclick="addClient()" style="padding:6px 14px;font-size:13px;border:0.5px solid var(--border2);border-radius:var(--radius);background:transparent;color:var(--text);cursor:pointer;font-weight:500">+ Add client</button>
+<div style="margin-left:auto"><button onclick="exportHealth()" class="exbtn">Export portfolio ↓</button></div>
+</div>
+<div id="health-summary" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem"></div>
+<div id="client-list" style="display:flex;flex-direction:column;gap:10px"></div>
+<div id="no-clients" style="text-align:center;padding:2rem;color:var(--text2);font-size:14px">No clients added yet. Click "+ Add client" to start.</div>
+</div>
+
+<div id="hero" class="sec">
+<h2>Hero journey map</h2><p class="ssub">Map your customer as the hero of their own story. Complete one per account.</p>
+<div style="display:flex;gap:8px;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap">
+<select id="hero-select" style="flex:1;min-width:200px" onchange="loadHero()"><option value="">— Select or create a customer map —</option></select>
+<button onclick="newHero()" style="padding:6px 14px;font-size:13px;border:0.5px solid var(--border2);border-radius:var(--radius);background:transparent;color:var(--text);cursor:pointer;font-weight:500">+ New map</button>
+<button onclick="exportHero()" class="exbtn">Export map ↓</button>
+<button onclick="deleteHero()" class="exbtn">Delete</button>
+</div>
+<div id="hero-form" style="display:none">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1rem">
+<div><label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px">Contact name</label><input type="text" id="h-name" style="width:100%" placeholder="Alex Chen" oninput="saveHero()"></div>
+<div><label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px">Role / title</label><input type="text" id="h-role" style="width:100%" placeholder="VP of Customer Experience" oninput="saveHero()"></div>
+<div><label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px">Company</label><input type="text" id="h-company" style="width:100%" placeholder="Acme Corp" oninput="saveHero()"></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px">
+<div class="card" style="border-top:3px solid #5DCAA5"><div class="ct" style="color:#0F6E56">The hero's quest</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div><label style="font-size:11px;color:var(--text2);display:block;margin-bottom:3px">Major business outcomes they're pursuing</label><textarea id="h-quest" rows="3" style="width:100%;resize:vertical" placeholder="What does winning look like for them?" oninput="saveHero()"></textarea></div>
+<div><label style="font-size:11px;color:var(--text2);display:block;margin-bottom:3px">Why it matters personally / what's at stake</label><textarea id="h-stake" rows="2" style="width:100%;resize:vertical" placeholder="Career, budget, team reputation..." oninput="saveHero()"></textarea></div>
+<div><label style="font-size:11px;color:var(--text2);display:block;margin-bottom:3px">How our product fits their quest</label><textarea id="h-fit" rows="2" style="width:100%;resize:vertical" placeholder="Specific capabilities that matter..." oninput="saveHero()"></textarea></div>
+</div></div>
+<div class="card" style="border-top:3px solid #F09595"><div class="ct" style="color:#A32D2D">Obstacles & challenges</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div><label style="font-size:11px;color:var(--text2);display:block;margin-bottom:3px">Internal obstacles</label><textarea id="h-internal" rows="2" style="width:100%;resize:vertical" placeholder="Competing priorities, budget, staffing..." oninput="saveHero()"></textarea></div>
+<div><label style="font-size:11px;color:var(--text2);display:block;margin-bottom:3px">External pressures</label><textarea id="h-external" rows="2" style="width:100%;resize:vertical" placeholder="Industry shifts, competitive threats..." oninput="saveHero()"></textarea></div>
+<div><label style="font-size:11px;color:var(--text2);display:block;margin-bottom:3px">Product friction points</label><textarea id="h-friction" rows="2" style="width:100%;resize:vertical" placeholder="Where our product creates friction..." oninput="saveHero()"></textarea></div>
+</div></div>
+<div class="card" style="border-top:3px solid #AFA9EC"><div class="ct" style="color:#3C3489">Supporting characters</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div><label style="font-size:11px;color:var(--text2);display:block;margin-bottom:3px">Allies (internal champions)</label><textarea id="h-allies" rows="2" style="width:100%;resize:vertical" placeholder="Names, roles, why they support..." oninput="saveHero()"></textarea></div>
+<div><label style="font-size:11px;color:var(--text2);display:block;margin-bottom:3px">Blockers / skeptics</label><textarea id="h-blockers" rows="2" style="width:100%;resize:vertical" placeholder="Names, roles, concerns..." oninput="saveHero()"></textarea></div>
+<div><label style="font-size:11px;color:var(--text2);display:block;margin-bottom:3px">Power players (decision control)</label><textarea id="h-power" rows="2" style="width:100%;resize:vertical" placeholder="Who can approve, block, or accelerate..." oninput="saveHero()"></textarea></div>
+</div></div>
+<div class="card" style="border-top:3px solid #FAC775"><div class="ct" style="color:#854F0B">Personality & approach</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div><label style="font-size:11px;color:var(--text2);display:block;margin-bottom:3px">Observed personality traits</label><textarea id="h-personality" rows="2" style="width:100%;resize:vertical" placeholder="Data-driven, risk-averse, impatient..." oninput="saveHero()"></textarea></div>
+<div><label style="font-size:11px;color:var(--text2);display:block;margin-bottom:3px">Communication preferences</label><textarea id="h-comms" rows="2" style="width:100%;resize:vertical" placeholder="Email vs call, response time, meeting style..." oninput="saveHero()"></textarea></div>
+<div><label style="font-size:11px;color:var(--text2);display:block;margin-bottom:3px">What surprised me most</label><textarea id="h-surprise" rows="2" style="width:100%;resize:vertical" placeholder="Insights that changed my approach..." oninput="saveHero()"></textarea></div>
+</div></div>
+</div>
+<div style="margin-top:.5rem;font-size:12px;color:var(--text2)" id="hero-saved"></div>
+</div>
+<div id="hero-empty" style="text-align:center;padding:2rem;color:var(--text2);font-size:14px">Select a customer map from the dropdown, or create a new one to get started.</div>
+</div>
+</div>
+
+<script>
+var RC_CATS=[
+  {id:'product-gap',label:'Product gap',bg:'#FCEBEB',fg:'#A32D2D'},
+  {id:'product-issues',label:'Product issues',bg:'#FCEBEB',fg:'#A32D2D'},
+  {id:'low-engagement',label:'Low engagement',bg:'#FAEEDA',fg:'#854F0B'},
+  {id:'stakeholder-turnover',label:'Stakeholder turnover',bg:'#FAEEDA',fg:'#854F0B'},
+  {id:'low-adoption',label:'Low adoption',bg:'#FAEEDA',fg:'#854F0B'},
+  {id:'low-value',label:'Low value achieved',bg:'#FAEEDA',fg:'#854F0B'},
+  {id:'financial',label:'Financial instability',bg:'#EEEDFE',fg:'#3C3489'},
+  {id:'poor-onboarding',label:'Poor onboarding',bg:'#EEEDFE',fg:'#3C3489'},
+  {id:'low-satisfaction',label:'Low satisfaction',bg:'#EEEDFE',fg:'#3C3489'},
+  {id:'exec-disengaged',label:'Exec disengaged',bg:'#FAECE7',fg:'#993C1D'},
+  {id:'competitor-eval',label:'Evaluating competitors',bg:'#FAECE7',fg:'#993C1D'}
+];
+function showSec(id,btn){document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('active')});document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('active')});document.getElementById(id).classList.add('active');btn.classList.add('active')}
+function tAcc(hd){var b=hd.nextElementSibling,c=hd.querySelector('.chv'),o=b.classList.contains('open');b.classList.toggle('open',!o);c.classList.toggle('open',!o)}
+function updP(prefix){var cbs=document.querySelectorAll('[id^="'+prefix+'"]');var boxes=Array.from(cbs).filter(function(e){return e.type==='checkbox'});var chk=boxes.filter(function(e){return e.checked}).length,tot=boxes.length;var pct=tot?Math.round(chk/tot*100):0;var bar=document.getElementById(prefix+'-progress'),lbl=document.getElementById(prefix+'-progress-label');if(bar)bar.style.width=pct+'%';if(lbl)lbl.textContent=chk+' of '+tot+' complete'}
+var scoreCats=[{label:'Open questions (7:3 ratio)',id:'s1'},{label:'Affirmations',id:'s2'},{label:'Reflections (1-2 used)',id:'s3'},{label:'Summary delivered',id:'s4'},{label:'Depth of discovery',id:'s5'},{label:'Strategic influence',id:'s6'},{label:'Executive presence',id:'s7'},{label:'Renewal/expansion awareness',id:'s8'},{label:'Trust & relationship building',id:'s9'}];
+var scores={};scoreCats.forEach(function(c){scores[c.id]=5});
+function buildScorecard(){var c=document.getElementById('scorecard-sliders');if(!c)return;var h='';scoreCats.forEach(function(cat){h+='<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--text2)">'+cat.label+'</span><span style="font-weight:500" id="'+cat.id+'-val">5</span></div><input type="range" min="0" max="10" value="5" step="1" style="width:100%" oninput="updScore(\''+cat.id+'\',this.value)"></div>'});c.innerHTML=h;updOverall()}
+function updScore(id,v){scores[id]=parseInt(v);var e=document.getElementById(id+'-val');if(e)e.textContent=v;updOverall()}
+function updOverall(){var vals=Object.values(scores),avg=vals.reduce(function(a,b){return a+b},0)/vals.length,r=Math.round(avg*10)/10;var e=document.getElementById('overall-score'),i=document.getElementById('score-interp');if(e)e.textContent=r+' / 10';if(i)i.textContent=r>=8?'Strong strategic CSM performance':r>=6?'Solid foundation — focus on growth areas':r>=4?'Developing — deliberate practice recommended':'Early stage — revisit frameworks and role-play'}
+buildScorecard();
+var wkOffset=0,focusItems=[];
+function getWkKey(o){var d=new Date();d.setDate(d.getDate()-d.getDay()+1+o*7);return d.toISOString().slice(0,10)}
+function getWkLabel(o){var d=new Date();d.setDate(d.getDate()-d.getDay()+1+o*7);var e=new Date(d);e.setDate(e.getDate()+6);var f=function(dt){return dt.toLocaleDateString('en-US',{month:'short',day:'numeric'})};var lbl=o===0?'This week':o===-1?'Last week':o===1?'Next week':'';return(lbl?lbl+' — ':'')+f(d)+' – '+f(e)}
+function setWk(d){wkOffset+=d;document.getElementById('week-label').textContent=getWkLabel(wkOffset);loadRFS()}
+function getRFSKey(){return'rfs-'+getWkKey(wkOffset)}
+function saveRFS(){var data={proud:document.getElementById('rfs-proud').value,improve:document.getElementById('rfs-improve').value,learned:document.getElementById('rfs-learned').value,neglected:document.getElementById('rfs-neglected').value,schedule:document.getElementById('rfs-schedule').value,focus:focusItems};try{localStorage.setItem(getRFSKey(),JSON.stringify(data))}catch(e){}}
+function loadRFS(){var data=null;try{var s=localStorage.getItem(getRFSKey());if(s)data=JSON.parse(s)}catch(e){}document.getElementById('rfs-proud').value=data&&data.proud||'';document.getElementById('rfs-improve').value=data&&data.improve||'';document.getElementById('rfs-learned').value=data&&data.learned||'';document.getElementById('rfs-neglected').value=data&&data.neglected||'';document.getElementById('rfs-schedule').value=data&&data.schedule||'';focusItems=(data&&data.focus)||[];renderFI()}
+function clearRFS(){if(!confirm('Clear this week?'))return;focusItems=[];try{localStorage.removeItem(getRFSKey())}catch(e){}loadRFS()}
+function addFI(){focusItems.push({text:'',priority:'high',done:false});renderFI();saveRFS()}
+function rmFI(i){focusItems.splice(i,1);renderFI();saveRFS()}
+function updFI(i,f,v){focusItems[i][f]=v;saveRFS()}
+function renderFI(){var c=document.getElementById('focus-items');if(!c)return;if(!focusItems.length){c.innerHTML='<div style="font-size:13px;color:var(--text2);padding:8px 0">No items yet.</div>';return}var h='';focusItems.forEach(function(item,i){var cp={high:'#FCEBEB|#A32D2D',medium:'#FAEEDA|#854F0B',low:'#E1F5EE|#0F6E56'}[item.priority].split('|');h+='<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:0.5px solid var(--border)"><input type="checkbox"'+(item.done?' checked':'')+' onchange="updFI('+i+',\'done\',this.checked);renderFI()" style="flex-shrink:0;width:15px;height:15px;cursor:pointer;accent-color:#185FA5"><input type="text" value="'+(item.text||'').replace(/"/g,'&quot;')+'" placeholder="Action item..." oninput="updFI('+i+',\'text\',this.value)" style="flex:1;'+(item.done?'text-decoration:line-through;':'')+'"><select onchange="updFI('+i+',\'priority\',this.value);renderFI()" style="font-size:11px;background:'+cp[0]+';color:'+cp[1]+';font-weight:500;padding:3px 6px"><option value="high"'+(item.priority==='high'?' selected':'')+'>High</option><option value="medium"'+(item.priority==='medium'?' selected':'')+'>Medium</option><option value="low"'+(item.priority==='low'?' selected':'')+'>Low</option></select><button onclick="rmFI('+i+')" style="font-size:16px;border:none;background:transparent;color:var(--text2);cursor:pointer">×</button></div>'});c.innerHTML=h}
+function exportRFS(){var wl=getWkLabel(wkOffset);var d=null;try{var s=localStorage.getItem(getRFSKey());if(s)d=JSON.parse(s)}catch(e){}var fi=(d&&d.focus)||[];var lines=['WEEKLY RFS PLANNER — '+wl.toUpperCase(),'='.repeat(50),'','REFLECT','','What I am most proud of:',(d&&d.proud)||'(not filled in)','','Where I did not show up at my best:',(d&&d.improve)||'(not filled in)','','One thing I learned:',(d&&d.learned)||'(not filled in)','','Customers I neglected:',(d&&d.neglected)||'(not filled in)','','FOCUS ITEMS',''];if(fi.length){fi.forEach(function(it,i){lines.push((i+1)+'. ['+(it.done?'x':' ')+'] '+it.priority.toUpperCase()+' — '+(it.text||'(blank)'))})}else{lines.push('(none added)')}lines.push('','SCHEDULE NOTES','',(d&&d.schedule)||'(not filled in)');dlText(lines.join('\n'),'rfs-'+getWkKey(wkOffset)+'.txt')}
+document.getElementById('week-label').textContent=getWkLabel(0);loadRFS();
+var clients=[];
+function saveClients(){try{localStorage.setItem('csm-clients',JSON.stringify(clients))}catch(e){}}
+function loadClients(){try{var s=localStorage.getItem('csm-clients');if(s)clients=JSON.parse(s)}catch(e){}renderClients()}
+function addClient(){clients.push({name:'New client',company:'',health:'green',renewal:'',segment:'',notes:'',risks:[]});saveClients();renderClients()}
+function rmClient(i){if(!confirm('Remove this client?'))return;clients.splice(i,1);saveClients();renderClients()}
+function updClient(i,f,v){clients[i][f]=v;saveClients();if(f==='health')renderSummary()}
+function toggleRisk(ci,rid){var c=clients[ci];c.risks=c.risks||[];var idx=c.risks.indexOf(rid);if(idx>-1)c.risks.splice(idx,1);else c.risks.push(rid);saveClients();renderClients()}
+function renderSummary(){var g=clients.filter(function(c){return c.health==='green'}).length,y=clients.filter(function(c){return c.health==='yellow'}).length,r=clients.filter(function(c){return c.health==='red'}).length;var el=document.getElementById('health-summary');if(!el)return;if(!clients.length){el.innerHTML='';return}el.innerHTML='<div class="si"><div class="sl">Green</div><div class="sn" style="color:#0F6E56">'+g+'</div></div><div class="si"><div class="sl">Yellow</div><div class="sn" style="color:#854F0B">'+y+'</div></div><div class="si"><div class="sl">Red</div><div class="sn" style="color:#A32D2D">'+r+'</div></div><div class="si"><div class="sl">Total</div><div class="sn">'+clients.length+'</div></div>'}
+function renderClients(){renderSummary();var el=document.getElementById('client-list'),noEl=document.getElementById('no-clients');if(!el)return;if(!clients.length){el.innerHTML='';noEl.style.display='block';return}noEl.style.display='none';var accentMap={green:'#5DCAA5',yellow:'#EF9F27',red:'#F09595'};var hBg={green:'#E1F5EE',yellow:'#FAEEDA',red:'#FCEBEB'},hFg={green:'#0F6E56',yellow:'#854F0B',red:'#A32D2D'};var h='';clients.forEach(function(c,i){var risks=c.risks||[];var pillsHtml=RC_CATS.map(function(cat){var sel=risks.indexOf(cat.id)>-1;return'<span class="rc-pill'+(sel?' sel':'')+'" style="background:'+cat.bg+';color:'+cat.fg+'" onclick="toggleRisk('+i+',\''+cat.id+'\')">'+cat.label+'</span>'}).join('');h+='<div class="card" style="border-left:3px solid '+accentMap[c.health||'green']+';border-radius:0 var(--radius-lg) var(--radius-lg) 0"><div style="display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap"><div style="flex:1;min-width:160px"><input type="text" value="'+(c.name||'').replace(/"/g,'&quot;')+'" placeholder="Client name" oninput="updClient('+i+',\'name\',this.value)" style="font-size:14px;font-weight:500;padding:3px 6px;border:none;border-bottom:0.5px solid var(--border2);background:transparent;color:var(--text);width:100%;margin-bottom:4px"><input type="text" value="'+(c.company||'').replace(/"/g,'&quot;')+'" placeholder="Company" oninput="updClient('+i+',\'company\',this.value)" style="font-size:12px;padding:3px 6px;border:none;background:transparent;color:var(--text2);width:100%"></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div><div style="font-size:10px;color:var(--text2);margin-bottom:3px">Health</div><select onchange="updClient('+i+',\'health\',this.value);renderClients()" style="font-size:12px;padding:3px 8px;border-radius:20px;background:'+hBg[c.health||'green']+';color:'+hFg[c.health||'green']+';font-weight:500"><option value="green"'+(c.health==='green'?' selected':'')+'>Green</option><option value="yellow"'+(c.health==='yellow'?' selected':'')+'>Yellow</option><option value="red"'+(c.health==='red'?' selected':'')+'>Red</option></select></div><div><div style="font-size:10px;color:var(--text2);margin-bottom:3px">Renewal</div><input type="text" value="'+(c.renewal||'')+'" placeholder="MM/YYYY" oninput="updClient('+i+',\'renewal\',this.value)" style="width:90px"></div><div><div style="font-size:10px;color:var(--text2);margin-bottom:3px">Segment</div><select onchange="updClient('+i+',\'segment\',this.value)"><option value=""'+(!c.segment?' selected':'')+'>—</option><option value="Enterprise"'+(c.segment==='Enterprise'?' selected':'')+'>Enterprise</option><option value="Mid-Market"'+(c.segment==='Mid-Market'?' selected':'')+'>Mid-Market</option><option value="SMB"'+(c.segment==='SMB'?' selected':'')+'>SMB</option></select></div><button onclick="rmClient('+i+')" class="exbtn" style="margin-top:14px">Remove</button></div></div><div style="margin-top:10px"><div style="font-size:11px;font-weight:500;color:var(--text2);margin-bottom:6px">Risk categories — click to toggle</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px">'+pillsHtml+'</div></div><div><label style="font-size:11px;color:var(--text2);display:block;margin-bottom:4px">Notes / next actions</label><textarea rows="2" placeholder="Key risks, open items, next actions..." oninput="updClient('+i+',\'notes\',this.value)" style="width:100%;font-size:12px">'+escHtml(c.notes||'')+'</textarea></div></div>'});el.innerHTML=h}
+function exportHealth(){var lines=['CLIENT HEALTH TRACKER — Portfolio Summary','Generated: '+new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}),'='.repeat(55),''];var g=clients.filter(function(c){return c.health==='green'}),y=clients.filter(function(c){return c.health==='yellow'}),r=clients.filter(function(c){return c.health==='red'});lines.push('PORTFOLIO OVERVIEW','Total clients: '+clients.length+'  |  Green: '+g.length+'  Yellow: '+y.length+'  Red: '+r.length,'');['red','yellow','green'].forEach(function(h){var grp=clients.filter(function(c){return c.health===h});if(!grp.length)return;lines.push(h.toUpperCase()+' ACCOUNTS ('+grp.length+')','');grp.forEach(function(c){lines.push('  '+(c.name||'Unnamed')+(c.company?' — '+c.company:'')+(c.segment?' ['+c.segment+']':'')+(c.renewal?' | Renewal: '+c.renewal:''));var rc=c.risks||[];if(rc.length){var rLabels=rc.map(function(id){var cat=RC_CATS.find(function(x){return x.id===id});return cat?cat.label:id});lines.push('    Risk flags: '+rLabels.join(', '))}if(c.notes&&c.notes.trim())lines.push('    Notes: '+c.notes.trim());lines.push('')})});dlText(lines.join('\n'),'health-tracker-'+new Date().toISOString().slice(0,10)+'.txt')}
+loadClients();
+var heroMaps={},curHeroKey=null;
+function saveHeroMaps(){try{localStorage.setItem('csm-heroes',JSON.stringify(heroMaps))}catch(e){}}
+function loadHeroMaps(){try{var s=localStorage.getItem('csm-heroes');if(s)heroMaps=JSON.parse(s)}catch(e){}loadHeroDd()}
+function loadHeroDd(){var sel=document.getElementById('hero-select');if(!sel)return;sel.innerHTML='<option value="">— Select or create a customer map —</option>';Object.keys(heroMaps).forEach(function(k){var m=heroMaps[k],opt=document.createElement('option');opt.value=k;opt.textContent=(m.name||'Unnamed')+(m.company?' — '+m.company:'');if(k===curHeroKey)opt.selected=true;sel.appendChild(opt)})}
+function newHero(){var k='hero-'+Date.now();heroMaps[k]={};curHeroKey=k;saveHeroMaps();loadHeroDd();showHeroForm()}
+function deleteHero(){if(!curHeroKey)return;if(!confirm('Delete this hero map?'))return;delete heroMaps[curHeroKey];curHeroKey=null;saveHeroMaps();loadHeroDd();document.getElementById('hero-form').style.display='none';document.getElementById('hero-empty').style.display='block'}
+function loadHero(){var sel=document.getElementById('hero-select');curHeroKey=sel.value;if(!curHeroKey){document.getElementById('hero-form').style.display='none';document.getElementById('hero-empty').style.display='block';return}showHeroForm()}
+function showHeroForm(){document.getElementById('hero-form').style.display='block';document.getElementById('hero-empty').style.display='none';var m=heroMaps[curHeroKey]||{};['name','role','company','quest','stake','fit','internal','external','friction','allies','blockers','power','personality','comms','surprise'].forEach(function(f){var e=document.getElementById('h-'+f);if(e)e.value=m[f]||''})}
+function saveHero(){if(!curHeroKey)return;var m=heroMaps[curHeroKey]||{};['name','role','company','quest','stake','fit','internal','external','friction','allies','blockers','power','personality','comms','surprise'].forEach(function(f){var e=document.getElementById('h-'+f);if(e)m[f]=e.value});heroMaps[curHeroKey]=m;saveHeroMaps();loadHeroDd();var sv=document.getElementById('hero-saved');if(sv){sv.textContent='Saved';setTimeout(function(){sv.textContent=''},1500)}}
+function exportHero(){if(!curHeroKey){alert('Select a hero map first');return}var m=heroMaps[curHeroKey]||{};var lines=['HERO JOURNEY MAP','Customer: '+(m.name||'—')+' | '+(m.role||'—')+' | '+(m.company||'—'),'Generated: '+new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}),'='.repeat(55),'','THE HERO\'S QUEST','','Major business outcomes:',m.quest||'—','','Why it matters personally:',m.stake||'—','','How our product fits:',m.fit||'—','','OBSTACLES & CHALLENGES','','Internal obstacles:',m.internal||'—','','External pressures:',m.external||'—','','Product friction:',m.friction||'—','','SUPPORTING CHARACTERS','','Allies:',m.allies||'—','','Blockers:',m.blockers||'—','','Power players:',m.power||'—','','PERSONALITY & APPROACH','','Traits:',m.personality||'—','','Communication preferences:',m.comms||'—','','What surprised me:',m.surprise||'—'];dlText(lines.join('\n'),'hero-'+(m.name||'map').replace(/\s+/g,'-').toLowerCase()+'-'+new Date().toISOString().slice(0,10)+'.txt')}
+loadHeroMaps();
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function dlText(text,filename){var bl=new Blob([text],{type:'text/plain'});var a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(a.href)}
+</script>
+</body>
+</html>
